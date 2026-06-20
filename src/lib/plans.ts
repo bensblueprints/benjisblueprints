@@ -24,6 +24,7 @@ export const PLANS: Plan[] = [
   { slug: "snap-on-tiles", title: "Snap-On Tiles", type: "shopify", blurb: "Interlocking garage floor tiles — a shippable home-improvement product.", supplier: "garage floor tiles interlocking" },
   { slug: "foam-parties", title: "Foam Parties", type: "ghl", blurb: "Foam-cannon party rentals — fast-ROI local events service.", supplier: "foam machine cannon party" },
   { slug: "light-bulb-drinks", title: "Light Bulb Drinks", type: "ghl", blurb: "Novelty light-bulb-bottle shakes — the most photogenic drink in town.", supplier: "light bulb shaped drink bottles" },
+  { slug: "virtual-graffiti-wall", title: "Virtual Graffiti Wall", type: "ghl", blurb: "Mess-free digital graffiti for events — a photo-booth on steroids at $350-550/hr.", supplier: "LED video wall panels" },
 ];
 
 export const SHOPIFY_URL = process.env.NEXT_PUBLIC_SHOPIFY_URL || "https://www.shopify.com/free-trial";
