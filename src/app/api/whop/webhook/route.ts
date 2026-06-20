@@ -65,7 +65,8 @@ export async function POST(req: Request) {
   }
 
   const action = body?.action ?? "";
-  if (action === "membership.went_valid" || action === "app_membership.went_valid") {
+  // "Membership activated" in the Whop UI = membership.went_valid (cover both labels).
+  if (/^(app_)?membership\.(went_valid|activated)$/.test(action)) {
     const d = (body.data ?? {}) as Record<string, any>;
     let email: string | null = d.email ?? d.user_email ?? d.user?.email ?? null;
     if (!email && d.id) email = await emailFromMembership(String(d.id));
