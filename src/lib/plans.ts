@@ -29,6 +29,10 @@ export const PLANS: Plan[] = [
 export const SHOPIFY_URL = process.env.NEXT_PUBLIC_SHOPIFY_URL || "https://www.shopify.com/free-trial";
 export const GHL_URL = process.env.NEXT_PUBLIC_GHL_URL || "https://www.gohighlevel.com";
 export const SLACK_URL = process.env.NEXT_PUBLIC_SLACK_URL || "#";
+// Free Whop community — the gate. Joining unlocks everything.
+export const WHOP_FREE_URL =
+  process.env.NEXT_PUBLIC_WHOP_URL ||
+  "https://whop.com/benjis-business-blueprints/free-business-plans-suppliers";
 export const PLANS_FOLDER_URL =
   process.env.NEXT_PUBLIC_PLANS_URL ||
   "https://drive.google.com/drive/folders/1I--Aa_uMJMtv5p95IHHBcEGPJj1gEA0u";

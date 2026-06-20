@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import HoverVideo from "@/components/HoverVideo";
-import { PLANS, SHOPIFY_URL, GHL_URL, SLACK_URL, alibabaSearch } from "@/lib/plans";
+import { PLANS, SHOPIFY_URL, GHL_URL, SLACK_URL, WHOP_FREE_URL, alibabaSearch } from "@/lib/plans";
 
 export const metadata: Metadata = {
   title: "Your Business Plan Library — Benji's Blueprints",
@@ -30,6 +30,8 @@ export default function PlansPage() {
   .slack{display:inline-block;background:linear-gradient(90deg,var(--gold),var(--gold-bright));color:var(--ink);
     font-weight:800;font-size:16px;text-decoration:none;padding:15px 28px;border-radius:12px}
   .slack small{display:block;font-weight:600;font-size:12px;opacity:.8;margin-top:2px}
+  .upsell{display:inline-block;color:var(--gold);font-size:13px;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(212,175,55,.4);padding-bottom:1px}
+  .upsell:hover{color:var(--gold-bright)}
   .divider{margin:46px 0 24px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-soft)}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
   .card{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
@@ -71,10 +73,15 @@ export default function PlansPage() {
             Download any plan below and launch it. Each one routes you to the exact next step —
             cheap suppliers, a ready-made Shopify store, or a full CRM + phone system to run it.
           </p>
-          <a className="slack" href={SLACK_URL} target="_blank" rel="noopener noreferrer">
-            Join the Inner Circle — $99/mo
-            <small>Private Slack + live coaching calls every week</small>
+          <a className="slack" href={WHOP_FREE_URL} target="_blank" rel="noopener noreferrer">
+            Join the Free Community →
+            <small>Free Whop access — every plan, supplier list + new drops weekly</small>
           </a>
+          <div style={{ marginTop: 14 }}>
+            <a className="upsell" href={SLACK_URL} target="_blank" rel="noopener noreferrer">
+              Want live coaching? Join the Inner Circle — $99/mo →
+            </a>
+          </div>
         </div>
 
         <div className="divider">— {PLANS.length} done-for-you business plans —</div>
@@ -114,7 +121,7 @@ export default function PlansPage() {
         </div>
 
         <p className="foot">
-          New plans added every week. <a href={SLACK_URL}>Join the inner circle</a> to get them first + weekly live calls.
+          New plans added every week. <a href={WHOP_FREE_URL}>Join the free community</a> to get every drop first.
         </p>
       </main>
     </>

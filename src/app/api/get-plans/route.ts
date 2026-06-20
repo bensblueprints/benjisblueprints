@@ -7,6 +7,9 @@ export const runtime = "nodejs";
 const PLANS_URL =
   process.env.NEXT_PUBLIC_PLANS_URL ||
   "https://drive.google.com/drive/folders/1I--Aa_uMJMtv5p95IHHBcEGPJj1gEA0u";
+const WHOP_FREE_URL =
+  process.env.NEXT_PUBLIC_WHOP_URL ||
+  "https://whop.com/benjis-business-blueprints/free-business-plans-suppliers";
 const FROM = process.env.EMAIL_FROM || "Benji <ben@benjisaiempire.com>";
 const NOTIFY = (process.env.ADMIN_EMAILS || "ben@advancedmarketing.co")
   .split(",")
@@ -22,13 +25,16 @@ function subscriberEmail() {
       <tr><td style="font:700 13px 'Courier New',monospace;letter-spacing:.28em;text-transform:uppercase;color:#d4af37;padding-bottom:18px">Benji's Blueprints</td></tr>
       <tr><td style="font-size:26px;font-weight:800;line-height:1.2;padding-bottom:14px">Here are your free business plans 📈</td></tr>
       <tr><td style="font-size:16px;line-height:1.6;color:rgba(244,236,216,.75);padding-bottom:26px">
-        Thanks for joining. Here's the full library of done-for-you business plans — the exact breakdowns from my daily videos. New ones get added every week, and you'll always have access to this same folder.
+        Thanks for joining. Click below to enter the <strong>free community</strong> — that's where every done-for-you business plan, supplier list, and new weekly drop lives. It's 100% free to join.
       </td></tr>
-      <tr><td style="padding-bottom:26px">
-        <a href="${PLANS_URL}" style="display:inline-block;background:#d4af37;color:#0b0b0c;font-weight:800;font-size:16px;text-decoration:none;padding:15px 28px;border-radius:10px">Open the plans folder →</a>
+      <tr><td style="padding-bottom:18px">
+        <a href="${WHOP_FREE_URL}" style="display:inline-block;background:#d4af37;color:#0b0b0c;font-weight:800;font-size:16px;text-decoration:none;padding:15px 28px;border-radius:10px">Enter the free community →</a>
+      </td></tr>
+      <tr><td style="font-size:13px;line-height:1.6;color:rgba(244,236,216,.5);padding-bottom:18px">
+        Or paste this into your browser:<br><a href="${WHOP_FREE_URL}" style="color:#d4af37;word-break:break-all">${WHOP_FREE_URL}</a>
       </td></tr>
       <tr><td style="font-size:13px;line-height:1.6;color:rgba(244,236,216,.5)">
-        Or paste this into your browser:<br><a href="${PLANS_URL}" style="color:#d4af37;word-break:break-all">${PLANS_URL}</a>
+        Prefer the raw files? <a href="${PLANS_URL}" style="color:#d4af37">Grab the plans folder here</a>.
       </td></tr>
       <tr><td style="padding-top:30px;border-top:1px solid rgba(244,236,216,.14);margin-top:24px;font-size:12px;color:rgba(244,236,216,.4)">
         — Benji &middot; benjisblueprints.com
