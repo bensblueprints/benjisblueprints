@@ -56,6 +56,9 @@ export default function Page() {
   .sub{font-size:clamp(16px,2.4vw,19px);line-height:1.5;color:var(--cream-soft);max-width:540px;
     margin:0 auto 34px}
   .whop-embed{max-width:480px;margin:0 auto;border-radius:14px;overflow:hidden}
+  .login-line{margin-top:16px;font-size:14px;color:var(--cream-soft)}
+  .login-line a{color:var(--gold);font-weight:700;text-decoration:none}
+  .login-line a:hover{color:var(--gold-bright)}
   .planform{display:flex;flex-direction:column;gap:12px;max-width:440px;margin:0 auto}
   .planform input{width:100%;padding:16px 18px;font-size:16px;border-radius:12px;border:1px solid var(--line);
     background:var(--ink-2);color:var(--cream);outline:none;font-family:inherit;text-align:center}
@@ -99,6 +102,10 @@ export default function Page() {
           </p>
 
           <WhopSignup />
+
+          <p className="login-line">
+            Already a member? <a href="/api/auth/whop/login">Log in to your plans →</a>
+          </p>
 
           <div className="count">
             {PLANS.length}+ full business plans inside &middot; updated weekly
