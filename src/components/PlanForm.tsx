@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-
-const PLANS_URL =
-  process.env.NEXT_PUBLIC_PLANS_URL ||
-  "https://drive.google.com/drive/folders/1I--Aa_uMJMtv5p95IHHBcEGPJj1gEA0u";
+import { useRouter } from "next/navigation";
 
 export default function PlanForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "error" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [error, setError] = useState("");
 
   async function onSubmit(e: React.FormEvent) {
@@ -27,24 +25,12 @@ export default function PlanForm() {
         setError(data.error || "Something went wrong. Try again.");
         return;
       }
-      setStatus("done");
+      // Email delivered + lead notified by the API; send them to the library.
+      router.push("/plans");
     } catch {
       setStatus("error");
       setError("Network error. Try again.");
     }
-  }
-
-  if (status === "done") {
-    return (
-      <div className="planform-done">
-        <div className="planform-check">✓</div>
-        <h2>You&apos;re in!</h2>
-        <p>Your business plans are ready — and we emailed the link to you too.</p>
-        <a className="planform-open" href={PLANS_URL} target="_blank" rel="noopener noreferrer">
-          Open the plans folder →
-        </a>
-      </div>
-    );
   }
 
   return (
