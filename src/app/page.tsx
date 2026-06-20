@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PlanForm from "@/components/PlanForm";
+import WhopSignup from "@/components/WhopSignup";
 
 export const metadata: Metadata = {
   title: "Free Business Plans — Benji's Blueprints",
@@ -55,6 +55,7 @@ export default function Page() {
   h1 .hl{color:var(--gold-bright)}
   .sub{font-size:clamp(16px,2.4vw,19px);line-height:1.5;color:var(--cream-soft);max-width:540px;
     margin:0 auto 34px}
+  .whop-embed{max-width:480px;margin:0 auto;border-radius:14px;overflow:hidden}
   .planform{display:flex;flex-direction:column;gap:12px;max-width:440px;margin:0 auto}
   .planform input{width:100%;padding:16px 18px;font-size:16px;border-radius:12px;border:1px solid var(--line);
     background:var(--ink-2);color:var(--cream);outline:none;font-family:inherit;text-align:center}
@@ -87,17 +88,17 @@ export default function Page() {
       <main className="bridge">
         <div className="bridge-inner">
           <div className="wordmark">Benji&apos;s Blueprints</div>
-          <span className="eyebrow">Free Download</span>
+          <span className="eyebrow">Free Membership</span>
           <h1>
             Steal My Genius <span className="hl">Business Ideas</span>
           </h1>
           <p className="sub">
-            Drop your email and I&apos;ll send you the entire library of
+            Join the free community below to unlock the entire library of
             done-for-you business plans — the exact breakdowns from my daily
-            videos. New plans added every week.
+            videos. New plans added every week. 100% free.
           </p>
 
-          <PlanForm />
+          <WhopSignup />
 
           <div className="count">
             {PLANS.length}+ full business plans inside &middot; updated weekly
@@ -108,7 +109,7 @@ export default function Page() {
             ))}
           </div>
 
-          <p className="foot">No spam, ever. Just the plans.</p>
+          <p className="foot">Free forever. Join once, get every plan + new drops weekly.</p>
         </div>
       </main>
     </>
