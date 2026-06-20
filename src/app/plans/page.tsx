@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import HoverVideo from "@/components/HoverVideo";
 import { PLANS, SHOPIFY_URL, GHL_URL, SLACK_URL, alibabaSearch } from "@/lib/plans";
 
 export const metadata: Metadata = {
@@ -32,7 +33,12 @@ export default function PlansPage() {
   .divider{margin:46px 0 24px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-soft)}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
   .card{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-  .thumb{width:100%;height:280px;object-fit:cover;background:var(--ink-3);display:block}
+  .thumb-wrap{position:relative;height:280px;overflow:hidden;cursor:pointer;background:var(--ink-3)}
+  .thumb{width:100%;height:280px;object-fit:cover;display:block}
+  .thumb-play{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;
+    background:rgba(11,11,12,.6);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(4px);pointer-events:none}
+  .thumb-wrap:hover .thumb-play{opacity:0;transition:opacity .2s}
   .card-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
   .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
   .card h3{font-size:18px;font-weight:800;line-height:1.2}
@@ -76,8 +82,7 @@ export default function PlansPage() {
         <div className="grid">
           {PLANS.map((p) => (
             <div className="card" key={p.slug}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="thumb" src={`/thumbs/${p.slug}.jpg`} alt={p.title} loading="lazy" />
+              <HoverVideo src={`/videos/${p.slug}.mp4`} poster={`/thumbs/${p.slug}.jpg`} alt={p.title} />
               <div className="card-body">
                 <div className="card-head">
                   <h3>{p.title}</h3>
