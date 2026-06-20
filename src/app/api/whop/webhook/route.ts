@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { makeWebhookValidator } from "@whop/api";
+import crypto from "node:crypto";
 
 export const runtime = "nodejs";
 
@@ -8,11 +8,27 @@ const GHL_LOCATION_ID = process.env.GHL_LOCATION_ID ?? "";
 const WHOP_WEBHOOK_SECRET = process.env.WHOP_WEBHOOK_SECRET ?? "";
 const WHOP_API_KEY = process.env.WHOP_API_KEY ?? "";
 
-const validateWebhook = WHOP_WEBHOOK_SECRET
-  ? makeWebhookValidator({ webhookSecret: WHOP_WEBHOOK_SECRET })
-  : null;
+// Verify Whop's signature header: `x-whop-signature: t=<ts>,v1=<hex hmac-sha256(ts.body)>`.
+// Version-agnostic on the payload's api_version (Whop dashboard set to v1).
+function verify(raw: string, header: string | null): boolean {
+  if (!header || !WHOP_WEBHOOK_SECRET) return false;
+  const [tPart, sPart] = header.split(",");
+  const timestamp = (tPart ?? "").split("=")[1];
+  const [version, sentSig] = (sPart ?? "").split("=");
+  if (!timestamp || version !== "v1" || !sentSig) return false;
+  const now = Math.round(Date.now() / 1000);
+  if (Number.isNaN(Number(timestamp)) || Math.abs(now - Number(timestamp)) > 300) return false;
+  const expected = crypto
+    .createHmac("sha256", WHOP_WEBHOOK_SECRET)
+    .update(`${timestamp}.${raw}`)
+    .digest("hex");
+  try {
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sentSig));
+  } catch {
+    return false;
+  }
+}
 
-// Upsert a contact into GoHighLevel (dedupes by email).
 async function upsertToGHL(email: string, name?: string) {
   if (!GHL_API_KEY || !GHL_LOCATION_ID) return;
   const parts = (name ?? "").trim().split(/\s+/).filter(Boolean);
@@ -37,7 +53,6 @@ async function upsertToGHL(email: string, name?: string) {
   });
 }
 
-// Fallback: fetch the membership to get the email if the webhook payload omits it.
 async function emailFromMembership(membershipId: string): Promise<string | null> {
   if (!membershipId || !WHOP_API_KEY) return null;
   try {
@@ -53,25 +68,24 @@ async function emailFromMembership(membershipId: string): Promise<string | null>
 }
 
 export async function POST(req: Request) {
-  let body: { action?: string; data?: Record<string, unknown> };
-  try {
-    if (validateWebhook) {
-      body = (await validateWebhook(req)) as unknown as typeof body;
-    } else {
-      body = await req.json();
-    }
-  } catch {
+  const raw = await req.text();
+  if (!verify(raw, req.headers.get("x-whop-signature"))) {
     return NextResponse.json({ ok: false, error: "invalid signature" }, { status: 401 });
   }
 
+  let body: { action?: string; data?: Record<string, any> };
+  try {
+    body = JSON.parse(raw);
+  } catch {
+    return NextResponse.json({ ok: false, error: "bad json" }, { status: 400 });
+  }
+
   const action = body?.action ?? "";
-  // "Membership activated" in the Whop UI = membership.went_valid (cover both labels).
   if (/^(app_)?membership\.(went_valid|activated)$/.test(action)) {
     const d = (body.data ?? {}) as Record<string, any>;
     let email: string | null = d.email ?? d.user_email ?? d.user?.email ?? null;
     if (!email && d.id) email = await emailFromMembership(String(d.id));
-    const name: string | undefined =
-      d.name ?? d.user?.name ?? d.user?.username ?? undefined;
+    const name: string | undefined = d.name ?? d.user?.name ?? d.user?.username ?? undefined;
     if (email) {
       try {
         await upsertToGHL(email, name);
