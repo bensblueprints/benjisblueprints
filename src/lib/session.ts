@@ -1,7 +1,9 @@
 import crypto from "node:crypto";
 
 // Signed, HttpOnly session cookie proving the user is a verified free member.
-const SECRET = process.env.WHOP_API_KEY ?? "bb-session-fallback-secret";
+// AUTH_SECRET is preferred; falls back to WHOP_API_KEY so existing deploys keep working.
+const SECRET =
+  process.env.AUTH_SECRET ?? process.env.WHOP_API_KEY ?? "bb-session-fallback-secret";
 export const SESSION_COOKIE = "bb_session";
 export const SESSION_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 

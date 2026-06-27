@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import WhopSignup from "@/components/WhopSignup";
+import RegisterForm from "@/components/RegisterForm";
 
 export const metadata: Metadata = {
-  title: "Free Business Plans — Benji's Blueprints",
+  title: "Unlock 245+ Business Plans — Benji's Blueprints",
   description:
-    "Drop your email and get the entire library of done-for-you business plans free — the exact breakdowns from my daily videos. New plans added every week.",
+    "Drop your email and get a one-click access link to the entire library of 245+ done-for-you business plans + supplier lists — free. New plans added every week.",
   alternates: { canonical: "https://benjisblueprints.com/" },
   openGraph: {
-    title: "Steal My Genius Business Ideas — Free",
+    title: "Unlock 245+ Business Plans + Suppliers — Free",
     description:
-      "Get the full library of done-for-you business plans, free. The exact breakdowns from my daily videos.",
+      "Get a one-click access link to the full library of done-for-you business plans + suppliers, free.",
     url: "https://benjisblueprints.com/",
     type: "website",
   },
@@ -91,24 +91,20 @@ export default function Page() {
       <main className="bridge">
         <div className="bridge-inner">
           <div className="wordmark">Benji&apos;s Blueprints</div>
-          <span className="eyebrow">Free Membership</span>
+          <span className="eyebrow">Free Access</span>
           <h1>
-            Steal My Genius <span className="hl">Business Ideas</span>
+            Unlock 245+ <span className="hl">Business Plans</span> + Suppliers
           </h1>
           <p className="sub">
-            Join the free community below to unlock the entire library of
-            done-for-you business plans — the exact breakdowns from my daily
-            videos. New plans added every week. 100% free.
+            Drop your email and we&apos;ll send a one-click access link to the entire library of
+            done-for-you business plans and supplier lists — the exact breakdowns from my daily
+            videos. New plans every week. 100% free, no password.
           </p>
 
-          <WhopSignup />
-
-          <p className="login-line">
-            Already a member? <a href="/api/auth/whop/login">Log in to your plans →</a>
-          </p>
+          <RegisterForm />
 
           <div className="count">
-            {PLANS.length}+ full business plans inside &middot; updated weekly
+            245+ full business plans inside &middot; updated weekly
           </div>
           <div className="plan-chips">
             {PLANS.map((p) => (

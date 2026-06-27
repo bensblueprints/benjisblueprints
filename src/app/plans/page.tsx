@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import PlansGrid from "@/components/PlansGrid";
+import RegisterForm from "@/components/RegisterForm";
 import { PLANS, SLACK_URL, WHOP_FREE_URL } from "@/lib/plans";
 import { verifySession, SESSION_COOKIE } from "@/lib/session";
 
@@ -32,6 +33,21 @@ const css = `
   .btn-gold{background:linear-gradient(90deg,var(--gold),var(--gold-bright));color:var(--ink);font-weight:800;font-size:16px;text-decoration:none;padding:15px 28px;border-radius:12px}
   .btn-ghost{background:var(--ink-2);border:1px solid var(--line);color:var(--cream);font-weight:700;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:12px}
   .btn-ghost:hover{border-color:var(--gold)}
+  .gate-form{width:100%;max-width:420px;margin:0 auto}
+  .planform{display:flex;flex-direction:column;gap:12px;max-width:420px;margin:0 auto}
+  .planform input{width:100%;padding:16px 18px;font-size:16px;border-radius:12px;border:1px solid var(--line);background:var(--ink-2);color:var(--cream);outline:none;font-family:inherit;text-align:center}
+  .planform input:focus{border-color:var(--gold)}
+  .planform button{width:100%;padding:16px 18px;font-size:16px;font-weight:800;border-radius:12px;border:none;background:linear-gradient(90deg,var(--gold),var(--gold-bright));color:var(--ink);cursor:pointer;transition:transform .15s ease,filter .15s ease}
+  .planform button:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.05)}
+  .planform button:disabled{opacity:.65;cursor:default}
+  .planform-error{color:#ffb4b4;font-size:14px}
+  .planform-fine{color:var(--cream-soft);font-size:13px;margin-top:2px}
+  .planform-done{max-width:420px;margin:0 auto;background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:32px 24px}
+  .planform-check{width:54px;height:54px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));color:var(--ink);font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center}
+  .planform-done h2{font-size:24px;font-weight:800;margin-bottom:8px}
+  .planform-done p{color:var(--cream-soft);font-size:15px;margin-bottom:14px}
+  .welcome-banner{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.35);border-radius:14px;padding:14px 18px;margin:0 auto 26px;max-width:640px;font-size:15px;font-weight:700}
+  .welcome-banner a{color:var(--ink);background:linear-gradient(90deg,var(--gold),var(--gold-bright));text-decoration:none;font-weight:800;padding:8px 16px;border-radius:9px}
 `;
 
 function LoginGate() {
@@ -44,32 +60,41 @@ function LoginGate() {
           Members <span className="hl">only</span>
         </h1>
         <p>
-          The plan library is for free community members. Log in with Whop to view it — or join
-          free in one click if you haven&apos;t yet.
+          The plan library is free — enter your email and we&apos;ll send a one-click access link
+          that logs you straight in.
         </p>
-        <div className="btns">
-          <a className="btn-gold" href="/api/auth/whop/login">
-            Log in with Whop →
-          </a>
-          <a className="btn-ghost" href={WHOP_FREE_URL} target="_blank" rel="noopener noreferrer">
-            Not a member? Join free →
-          </a>
+        <div className="gate-form">
+          <RegisterForm />
         </div>
       </main>
     </>
   );
 }
 
-export default async function PlansPage() {
+export default async function PlansPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ welcome?: string }>;
+}) {
   const session = (await cookies()).get(SESSION_COOKIE)?.value;
   const userId = verifySession(session);
 
   if (!userId) return <LoginGate />;
 
+  const { welcome } = await searchParams;
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <main className="wrap">
+        {welcome ? (
+          <div className="welcome-banner">
+            <span>You&apos;re in! 🎉</span>
+            <a href={WHOP_FREE_URL} target="_blank" rel="noopener noreferrer">
+              Join the community →
+            </a>
+          </div>
+        ) : null}
         <div className="top">
           <div className="wordmark">Benji&apos;s Blueprints</div>
           <h1>

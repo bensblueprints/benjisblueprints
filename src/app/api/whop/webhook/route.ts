@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
+import { upsertToGHL } from "@/lib/ghl";
 
 export const runtime = "nodejs";
 
-const GHL_API_KEY = process.env.GHL_API_KEY ?? "";
-const GHL_LOCATION_ID = process.env.GHL_LOCATION_ID ?? "";
 const WHOP_WEBHOOK_SECRET = process.env.WHOP_WEBHOOK_SECRET ?? "";
 const WHOP_API_KEY = process.env.WHOP_API_KEY ?? "";
 
@@ -27,30 +26,6 @@ function verify(raw: string, header: string | null): boolean {
   } catch {
     return false;
   }
-}
-
-async function upsertToGHL(email: string, name?: string) {
-  if (!GHL_API_KEY || !GHL_LOCATION_ID) return;
-  const parts = (name ?? "").trim().split(/\s+/).filter(Boolean);
-  const body: Record<string, unknown> = {
-    locationId: GHL_LOCATION_ID,
-    email,
-    tags: ["free-member", "benjis-blueprints"],
-    source: "Benji's Blueprints (Whop)",
-  };
-  if (parts.length) {
-    body.firstName = parts[0];
-    if (parts.length > 1) body.lastName = parts.slice(1).join(" ");
-  }
-  await fetch("https://services.leadconnectorhq.com/contacts/upsert", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${GHL_API_KEY}`,
-      Version: "2021-07-28",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
 }
 
 async function emailFromMembership(membershipId: string): Promise<string | null> {
@@ -88,7 +63,7 @@ export async function POST(req: Request) {
     const name: string | undefined = d.name ?? d.user?.name ?? d.user?.username ?? undefined;
     if (email) {
       try {
-        await upsertToGHL(email, name);
+        await upsertToGHL(email, name, "Benji's Blueprints (Whop)");
       } catch {
         // never fail the webhook on a downstream error
       }
